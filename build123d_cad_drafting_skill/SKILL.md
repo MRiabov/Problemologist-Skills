@@ -14,6 +14,34 @@ description: Expert CAD modeling using build123d. Includes builder modes, semant
 3. **MJCF Compliance**: Ensure parts are non-intersecting if they belong to different simulation links.
 4. **Assembly Labels**: Use `.label = "stator"` and `.label = "rotor"` for automatic motor/joint injection in MJCF.
 
+## Placement And Rotation Contract
+
+- Create top-level authored solids at the origin, then place them with `Location(...)`.
+- For exported benchmark/engineering assemblies, the simulation stack reads pose from `child.location`.
+- The orientation tuple inside `Location((x, y, z), (rx, ry, rz))` is in degrees, not radians.
+- If a mechanism uses multiple top-level parts that must share the same slope or travel direction, encode compatible rotated locations for each of them. Do not rotate only one part and leave companion rails/walls flat.
+- For chute/channel mechanisms, the floor and containment rails or walls must form one continuous corridor in the exported scene. Either place them with the same rotated frame or author them as one combined chute. A sloped floor with world-aligned rails/walls beside it is not a valid transport path.
+- Every child you place into `Compound(children=[...])` must be a distinct top-level object instance. Reusing one source shape is fine if you derive separate objects from it, for example with `.moved(...)`. Do not place the same mutable `Part` instance into the compound twice via repeated `.move(...)` calls.
+- If a top-level part must be rotated in the exported scene, encode the rotation directly in the location, for example:
+
+```python
+ramp = ramp_builder.part.move(Location((0, 0, 0.06), (0, 2, 0)))
+rail = rail_builder.part.move(Location((0, 0.06, 0.09), (0, 2, 0)))
+```
+
+- Do not rely on `part.rotate(...)` as the final pose step for top-level exported parts. That can leave `child.location.orientation` unchanged, which makes the exported MJCF/scene appear unrotated even if the local build123d object looked rotated.
+
+## Build-Zone Checks For Sloped Parts
+
+- Validate sloped or rotated parts against the final rotated envelope, not just the nominal support heights or centerline endpoints.
+- Include thickness, wall height, and top corners when checking whether an inclined floor or chute fits inside the allowed Z budget.
+- When Z headroom is tight, prefer a thin transport floor with separate supports or rails instead of a tall wedge that rises from the ground.
+
+## Workspace Execution Contract
+
+- In benchmark and engineer workspaces, shell verification commands already start in the seeded workspace root.
+- Do not prepend hard-coded `cd /workspace`, `cd /home/user/workspace`, or host-specific repo paths before validation or simulation checks.
+
 ## References & Contents
 
 ### [assembly.md](file:///home/maksym/Work/proj/Problemologist/Problemologist-AI/.agent/skills/build123d_cad_drafting_skill/references/assembly.md) (Assembly & Physics)
