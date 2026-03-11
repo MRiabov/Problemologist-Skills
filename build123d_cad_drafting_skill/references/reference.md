@@ -302,7 +302,7 @@ role="meth"} ed to create the final profile.
 This example introduces multiple useful and important concepts. Firstly
 `~operations_generic.chamfer`{.interpreted-text role="meth"} and
 `~operations_generic.fillet`{.interpreted-text role="meth"} can be used
-to \"bevel\" and \"round\" edges respectively. Secondly, these two
+to "bevel" and "round" edges respectively. Secondly, these two
 methods require an edge or a list of edges to operate on. To select all
 edges, you could simply pass in `ex9.edges()`.
 
@@ -686,7 +686,7 @@ the concepts in an earlier example.
 
 `~build_common.GridLocations`{.interpreted-text role="class"} places 4
 Circles on 4 points on this rotated workplane, and then the Circles are
-extruded in the \"both\" (positive and negative) normal direction.
+extruded in the "both" (positive and negative) normal direction.
 
 ## 23. Revolve {#ex 23}
 
@@ -771,7 +771,7 @@ Parts can also be transformed using an offset, but in this case with a
 3D `~operations_generic.offset`{.interpreted-text role="meth"}. Also
 commonly known as a shell, this allows creating thin walls using very
 few operations. This can also be offset inwards or outwards. Faces can
-be selected to be \"deleted\" using the `openings` parameter of
+be selected to be "deleted" using the `openings` parameter of
 `~operations_generic.offset`{.interpreted-text role="meth"}.
 
 Note that self intersecting edges and/or faces can break both 2D and 3D
@@ -883,7 +883,7 @@ a face and extruded.
 Locations contexts can be nested to create groups of shapes. Here 24
 triangles, 6 squares, and 1 hexagon are created and then extruded.
 Notably `~build_common.PolarLocations`{.interpreted-text role="class"}
-rotates any \"children\" groups by default.
+rotates any "children" groups by default.
 
 ![image](assets/general_ex31.svg){.align-center}
 
@@ -955,15 +955,15 @@ the size of each square.
 
 - **Builder mode**
 
-    > The text \"Hello\" is placed on top of a rectangle and embossed
+    > The text "Hello" is placed on top of a rectangle and embossed
     > (raised) by placing a BuildSketch on the top face (`topf`). Note
     > that `~build_enums.Align`{.interpreted-text role="class"} is used
     > to control the text placement. We re-use the `topf` variable to
-    > select the same face and deboss (indented) the text \"World\".
+    > select the same face and deboss (indented) the text "World".
     > Note that if we simply ran
     > `BuildSketch(ex34.faces().sort_by(Axis.Z)[-1])` for both
-    > `ex34_sk1 & 2` it would incorrectly locate the 2nd \"World\" text
-    > on the top of the \"Hello\" text.
+    > `ex34_sk1 & 2` it would incorrectly locate the 2nd "World" text
+    > on the top of the "Hello" text.
     >
     > ::: {.literalinclude language="build123d" start-after="[Ex. 34]" end-before="[Ex. 34]"}
     > general_examples.py
@@ -971,11 +971,11 @@ the size of each square.
 
 - **Algebra mode**
 
-    > The text \"Hello\" is placed on top of a rectangle and embossed
+    > The text "Hello" is placed on top of a rectangle and embossed
     > (raised) by placing a sketch on the top face (`topf`). Note that
     > `~build_enums.Align`{.interpreted-text role="class"} is used to
     > control the text placement. We re-use the `topf` variable to
-    > select the same face and deboss (indented) the text \"World\".
+    > select the same face and deboss (indented) the text "World".
     >
     > ::: {.literalinclude language="build123d" start-after="[Ex. 34]" end-before="[Ex. 34]"}
     > general_examples_algebra.py

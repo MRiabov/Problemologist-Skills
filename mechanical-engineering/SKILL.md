@@ -1,79 +1,45 @@
 ---
 name: mechanical-engineering
-description: Domain expertise for Mechanical Engineering, including Finite Element Analysis (FEA/FEM), fluid dynamics (MPM), stress/strain analysis, material selection, and structural optimization. Use this when tasks involve structural integrity, simulation-driven design, fluids, or complex material behaviors (elastomers).
+description: Mechanical mechanism design and simulation guidance for Problemologist. Use this when solving or reviewing passive-transfer mechanisms, realistic constraints/DOFs, stress or fluid tasks, or when a benchmark/solution needs concrete mechanical design patterns instead of prompt-specific hints.
 ---
 
 # Mechanical Engineering
 
-This skill provides the procedural and domain knowledge required to design parts and systems that are structurally sound, fluid-safe, and optimized for performance.
+Use this skill as a router. Keep the main prompt lean and load only the reference that matches the current problem.
 
-## 1. Dynamic Mechanical Data
+## When To Read Which Reference
 
-To get the most up-to-date material properties for FEA simulation, you MUST run the provided data script. **Do not rely on your internal knowledge or hardcoded values in this file.**
+- `references/mechanism_patterns.md`
+  Use for mechanism synthesis, passive/gravity transfer, realistic motion paths, and minimal-DOF decisions.
+- `references/fea_principles.md`
+  Use for stress-driven design, FEM interpretation, and structural failure avoidance.
+- `references/fluid_dynamics.md`
+  Use for fluid-containment or flow-rate benchmarks.
+- `references/optimization.md`
+  Use when a design already works and you are refining cost, weight, or safety factor.
 
-**Action**: Use `run_skill_script(skill_name="mechanical-engineering", script_name="get_mechanical_properties.py")`
+## Core Rules
 
-## 2. Simulation-Driven Design Workflow
+1. Make the transport mechanism explicit.
+   If the object must move laterally, roll, slide, funnel, deflect, or stay captured, model the actual surfaces or components that do that work. Spawn pedestals and containment walls are not enough.
+2. Prefer the simplest physically credible mechanism family.
+   Start with passive gravity transfer before adding motors, joints, or extra DOFs. Add motion only when the task truly requires it.
+3. Every non-static DOF must map to a real mechanism.
+   Bearings, sliders, motors, fasteners, or another allowed physical constraint must justify the motion. Convenience DOFs are review failures.
+4. Use the current runtime helpers for stress/fluid work.
+   `get_stress_report(...)`, `preview_stress(...)`, and `define_fluid(...)` are the current repo-level hooks; do not invent alternate analysis paths in prompts.
+5. Keep manufacturing and physics aligned.
+   Benchmark-owned fixtures are not priced as manufactured parts, but engineer-authored parts still need realistic geometry, materials, and attachment logic.
 
-All mechanical designs should follow an iterative "Design-Simulate-Analyze-Refine" loop.
+## Workflow
 
-1. **Design:** Create initial CAD geometry using `build123d`.
-2. **Simulate:** Run simulation with appropriate physics backend (`mujoco` for rigid-only, `genesis` for FEM/fluids).
-3. **Analyze:** Evaluate performance using stress reports and fluid metrics.
-4. **Refine:** Optimize geometry based on simulation data to reach target performance metrics.
+1. Identify the required mechanism family.
+2. Read the matching reference file.
+3. Build the simplest geometry that makes the required motion physically inevitable.
+4. Validate or simulate.
+5. Refine only after the base mechanism exists and is physically coherent.
 
-## 2. Structural Analysis (FEA/FEM)
+## Notes
 
-Use Finite Element Analysis to ensure parts do not break under load.
-
-### Key Metrics
-- **Von Mises Stress:** Primary scalar value for ductile material failure prediction.
-- **Safety Factor (SF):** Target **1.5 to 5.0**.
-  - **SF < 1.5:** High risk of `PART_BREAKAGE`. Add material/reinforcement.
-  - **SF > 5.0:** Overdesigned. Remove material to reduce cost/weight.
-- **Utilization:** Aim for **< 80%** of material capacity.
-
-### Design Patterns
-- **Fillets:** Use `fillet(radius=3.1)` on internal corners to reduce stress concentrations.
-- **Ribbing:** Add ribs to increase stiffness without excessive volume.
-- **Wall Thickness:** Correlate with stress. Ensure minimum thickness for structural integrity.
-
-**Detailed Reference:** [references/fea_principles.md](references/fea_principles.md)
-
----
-
-## 3. Fluid Dynamics (MPM)
-
-Use Material Point Method simulation for mechanisms interacting with liquids.
-
-### Fluid Objectives
-- **Containment:** Ensure > 95% of particles remain in the target zone.
-- **Flow Rate:** Monitor particles crossing gate planes.
-
-### Constraints
-- **Backend:** Fluids REQUIRES `physics.backend: genesis`.
-- **Smoke Test:** Use `smoke_test_mode: true` (capped at 5,000 particles) for rapid iteration.
-
-**Detailed Reference:** [references/fluid_dynamics.md](references/fluid_dynamics.md)
-
----
-
-## 4. Material Selection & Properties
-
-Match material classes to mechanical requirements.
-
-- **Class: Rigid** (Metals, Hard Plastics): Use for load-bearing structures. Uses linear FEM.
-- **Class: Soft / Elastomer** (Rubber, Silicone): Use for seals, hinges, or large-deformation parts. Uses hyperelastic (Neo-Hookean) FEM.
-
-**Mandatory Fields:** When `fem_enabled: true`, every manufactured part must have `ultimate_stress_pa` defined in `manufacturing_config.yaml`.
-
----
-
-## 5. Optimization & Integration
-
-Mechanical requirements must be balanced with manufacturing and economic constraints.
-
-- **Synergy with Manufacturing:** Use the `manufacturing-knowledge` skill to ensure mechanical optimizations (like ribs or fillets) remain manufacturable via CNC or IM.
-- **Failure Modes:** Proactively design against `PART_BREAKAGE`, `PHYSICS_INSTABILITY`, and `FLUID_OBJECTIVE_FAILED`.
-
-**Detailed Reference:** [references/optimization.md](references/optimization.md)
+- Do not move long mechanism heuristics back into `config/prompts.yaml`; keep them here or in references.
+- Keep benchmark-specific solution tricks in reference files so they can be updated independently of the prompt contract.

@@ -1,49 +1,41 @@
 ---
 name: electronics-engineering
-description: Comprehensive guidance for designing, validating, and routing electromechanical systems. Use when (1) designing circuits for motors, actuators, or switches; (2) performing 3D physical wire routing with waypoints and splines; (3) validating electrical connectivity (shorts, overcurrent) and physical clearances (wire-mesh intersection).
+description: Electromechanical planning and runtime guidance for the current Problemologist electronics stack. Use when a plan or implementation includes an `electronics` section, powered motors, wire routing, circuit validation, or electronics review.
 ---
 
 # Electronics Engineering Skill
 
-## Overview
+Use this skill for current repo behavior, not legacy prompt lore.
 
-This skill enables the integrated design of electronics and mechanics. It bridges the gap between mechanical mechanisms (motors) and the electrical systems (PSU, circuits, wiring) required to drive them.
+## Load The Right Reference
 
-## Core Workflows
+- `references/api_reference.md`
+  Use when you need the current schema or helper surface.
+- `references/circuit_patterns.md`
+  Use when composing an `ElectronicsSection` or reviewing a simple circuit topology.
+- `references/routing_best_practices.md`
+  Use when routing 3D wires or reviewing clearance/tension risks.
 
-### 1. Circuit Design (Logical Netlist)
-Design circuits using the `ElectronicsSection` model. Support components include:
-- **Motors**: (Rated Voltage, Stall Current). Map terminals as `+`, `-`.
-- **PSUs**: (DC Voltage, Max Current). Standard nodes: `supply_v+`, `0`.
-- **Switches/Relays**: (Gated control). Map terminals as `in`, `out`.
+## Core Rules
 
-**See [references/circuit_patterns.md](references/circuit_patterns.md) for implementation examples.**
+1. Treat `assembly_definition.yaml` as the source of truth for planner-authored electronics.
+2. Validate the logical circuit before physics simulation.
+   Shorts, open circuits, and overcurrent are pre-gate failures.
+3. Keep logical connectivity and physical routing separate but consistent.
+   A valid netlist is not enough if the routed wire path collides with geometry or tears under motion.
+4. Use current schemas and helpers, not stale placeholder APIs.
+5. Backward compatibility still exists:
+   if there is no `electronics` section, legacy episodes may still behave as implicitly powered. Do not invent electronics unless the task requires it.
 
-### 2. Physical 3D Wire Routing
-Wires are modeled as physical 3D splines/arcs defined by waypoints.
-- **Tools**: Use `shared.wire_utils.route_wire`.
-- **Waypoints**: Must avoid moving parts and maintain static clearance (>2mm).
-- **Physicality**: Simulation detects wire tears (high tension) and clearance violations (collisions).
+## Practical Workflow
 
-**See [references/routing_best_practices.md](references/routing_best_practices.md) for routing strategies.**
+1. Read the `electronics` section or planner intent.
+2. Load the current API reference.
+3. Define components and wires with explicit terminals.
+4. Run circuit validation and power-budget checks.
+5. If wires are physical, route them with waypoints and check clearance against the assembly.
 
-### 3. Verification & Validation
-- **Electrical**: PySpice is used to detect short circuits (I > 100x rating) and overcurrent.
-- **Physical**: `check_wire_clearance` detects path-geometry intersections.
-- **Gating**: Motors operate ONLY if the circuit state `is_powered(motor_id, t)` is active.
+## Contract Notes
 
-## Implementation Details
-
-### Boilerplate Setup
-Use the following imports and structure when creating new electromechanical scripts:
-**See [assets/electronics_boilerplate.py](assets/electronics_boilerplate.py)**
-
-### Key Rules
-1. **Backward Compatibility**: Mechanisms without defined electronics are "powered by default."
-2. **Terminal Mapping**: Ensure `from_terminal` and `to_terminal` correctly resolve to the intended component and node.
-3. **Safety First**: Always check `max_current_a` of the PSU against the sum of all load stall currents.
-
-## Summary of Tools
-- `shared.circuit_builder.build_circuit_from_section`: Generates PySpice Netlist.
-- `shared.wire_utils.route_wire`: Defines physical and logical wire properties.
-- `shared.wire_utils.check_wire_clearance`: Validates path against assembly geometry.
+- For authored CAD scripts, continue to use the canonical `utils.*` import surface unless the task is specifically editing repo internals.
+- For repo/runtime work, the current implementation surface is centered on `worker_heavy/utils/electronics.py`, `shared/circuit_builder.py`, `shared/pyspice_utils.py`, `shared/wire_utils.py`, and `shared/models/schemas.py`.

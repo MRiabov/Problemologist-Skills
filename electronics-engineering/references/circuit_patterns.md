@@ -1,24 +1,50 @@
 # Electromechanical Circuit Patterns
 
-## 1. Motor with Direct PSU
-Simple connection for always-on motors.
-- **PSU**: V+ -> Motor: +
-- **PSU**: 0 -> Motor: -
+## Terminal Mapping
 
-## 2. Motor with Relay/Switch
-For gated control.
-- **PSU**: V+ -> Relay: in
-- **Relay**: out -> Motor: +
-- **PSU**: 0 -> Motor: -
+- Motor terminals: `+`, `-` and legacy `a`, `b` normalize to the same nodes.
+- Switch and relay terminals: `in`, `out`
+- Main PSU nodes: `supply_v+`, `0`
 
-## 3. High-Current Parallel Supply
-For multiple high-load actuators.
-- **PSU**: V+ -> Splitter/Node
-- **Node**: 1 -> Motor 1: +
-- **Node**: 2 -> Motor 2: +
-- **Motor 1/2**: - -> PSU: 0
+## Direct-Powered Motor
 
-## 4. Component Terminal Mapping
-- **Motor**: `+`, `-` (or `a`, `b`)
-- **Switch/Relay**: `in`, `out`
-- **Power Supply**: `supply_v+`, `0` (or `v+`, `0`)
+Use when the motor should always be energized.
+
+- `supply_v+ -> motor.+`
+- `0 -> motor.-`
+
+## Switched Motor
+
+Use when a relay or switch gates motor power.
+
+- `supply_v+ -> switch.in`
+- `switch.out -> motor.+`
+- `0 -> motor.-`
+
+Review checks:
+
+- switch path is actually in series with the motor
+- motor still has a return path to `0`
+
+## Parallel Loads On One Supply
+
+Use when multiple loads share one PSU.
+
+- branch each positive feed intentionally
+- tie returns back to the same ground reference
+- compare total draw against `power_supply.max_current_a`
+
+Do not assume each branch is safe in isolation; the PSU gate is on total current.
+
+## Secondary Supply Component
+
+If a design needs a separate battery or secondary source, model it as a `POWER_SUPPLY` component with its own component ID and voltage.
+
+## Failure Patterns
+
+Reject these early:
+
+- motor positive connected but no negative return
+- component terminals present in `components` but never referenced by `wiring`
+- PSU sized below the sum of realistic load demand
+- wire gauge too small for expected current
