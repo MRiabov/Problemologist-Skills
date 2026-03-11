@@ -9,9 +9,13 @@ This skill provides the procedural and domain knowledge required to design parts
 
 ## 1. Dynamic Data Access
 
-To get the most up-to-date material properties, density, and cost constants, you MUST run the provided data script. **Do not rely on your internal knowledge or hardcoded values in this file.**
+To get the current material properties, density, and cost constants, use the runtime surfaces that are actually exposed in the workspace. **Do not rely on your internal knowledge or hardcoded values in this file.**
 
-**Action**: Use `run_skill_script(skill_name="manufacturing-knowledge", script_name="get_material_data.py")`
+Use:
+- `read_file("/config/manufacturing_config.yaml")` for material properties, process costs, and catalog data.
+- Planner roles: `validate_costing_and_price()` to validate and price `assembly_definition.yaml`.
+
+Do not browse `/scripts` or invent helper tools that are not exposed to your role.
 
 ## 2. CNC Milling (3-Axis)
 
@@ -75,4 +79,3 @@ part = shell(part, openings=part.faces().sort_by(Axis.Z).last(), amount=-2.0)
 # Expert Pattern: Applying 2-degree draft
 part = draft(part, faces=part.faces().filter_by(Axis.Z), angle=2.0, pull_direction=(0,0,1))
 ```
-
