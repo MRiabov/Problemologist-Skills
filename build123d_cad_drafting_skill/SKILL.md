@@ -21,13 +21,18 @@ description: Expert CAD modeling using build123d. Includes builder modes, semant
 - The orientation tuple inside `Location((x, y, z), (rx, ry, rz))` is in degrees, not radians.
 - If a mechanism uses multiple top-level parts that must share the same slope or travel direction, encode compatible rotated locations for each of them. Do not rotate only one part and leave companion rails/walls flat.
 - For chute/channel mechanisms, the floor and containment rails or walls must form one continuous corridor in the exported scene. Either place them with the same rotated frame or author them as one combined chute. A sloped floor with world-aligned rails/walls beside it is not a valid transport path.
-- Every child you place into `Compound(children=[...])` must be a distinct top-level object instance. Reusing one source shape is fine if you derive separate objects from it, for example with `.moved(...)`. Do not place the same mutable `Part` instance into the compound twice via repeated `.move(...)` calls.
+- Verify downhill direction from the authored geometry, not from angle comments. If the object must travel from lower X to higher X, the support surface must be higher at the negative-X handoff and lower at the positive-X handoff in the final placed geometry. Reverse that relation when travel goes the other way.
+- For X-aligned ramps or chutes rotated about Y, do not trust your intuition about the sign. Inspect the final placed part extents/vertices or exported scene and confirm that the spawn side is the high side before you accept the slope.
+- Every child you place into `Compound(children=[...])` must be a distinct top-level object instance. Reusing one source shape is fine only if you derive separate placed copies from it with `.moved(...)`. When you need two rails, two walls, or mirrored supports from one builder result, always create each placement with `.moved(...)`; reserve `.move(...)` for a one-off final placement of a single object. Do not place the same mutable `Part` instance into the compound twice via repeated `.move(...)` calls.
 - If a top-level part must be rotated in the exported scene, encode the rotation directly in the location, for example:
 
 ```python
 ramp = ramp_builder.part.move(Location((0, 0, 0.06), (0, 2, 0)))
-rail = rail_builder.part.move(Location((0, 0.06, 0.09), (0, 2, 0)))
+rail_upper = rail_builder.part.moved(Location((0, 0.06, 0.09), (0, 2, 0)))
+rail_lower = rail_builder.part.moved(Location((0, -0.06, 0.09), (0, 2, 0)))
 ```
+
+- If you first wrote `rail = rail_builder.part.move(...)` and later realize you need a mirrored or rotated companion rail, stop and rebuild that section with `.moved(...)` copies. Do not mutate the same builder result twice.
 
 - Do not rely on `part.rotate(...)` as the final pose step for top-level exported parts. That can leave `child.location.orientation` unchanged, which makes the exported MJCF/scene appear unrotated even if the local build123d object looked rotated.
 
@@ -36,6 +41,11 @@ rail = rail_builder.part.move(Location((0, 0.06, 0.09), (0, 2, 0)))
 - Validate sloped or rotated parts against the final rotated envelope, not just the nominal support heights or centerline endpoints.
 - Include thickness, wall height, and top corners when checking whether an inclined floor or chute fits inside the allowed Z budget.
 - When Z headroom is tight, prefer a thin transport floor with separate supports or rails instead of a tall wedge that rises from the ground.
+
+## Support Continuity Contract
+
+- For passive-transfer mechanisms, adjacent support parts must actually meet or overlap in the authored geometry where the object hands off between them.
+- Do not rely on center-position arithmetic or visual near-contact. Check the real extents of the ramp/chute against the neighboring platform or support and remove any unsupported gap.
 
 ## Workspace Execution Contract
 

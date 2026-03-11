@@ -65,3 +65,5 @@ Use only when the task explicitly allows direct execution side effects from the 
 1. Do not use `if __name__ == "__main__":` in authored scripts.
 2. Use workspace-relative paths such as `script.py`, `todo.md`, and `renders/preview.png`.
 3. Keep long operational guidance in skills like this one rather than copying it into planner/coder prompts.
+4. Keep authored scripts terse. Avoid long module docstrings, banner comment blocks, and other decorative prose in files that will be emitted through `write_file(...)`.
+5. If a tool call would require a very large or quote-heavy `content` string, simplify the script content first so the `write_file(...)` arguments remain valid JSON.
