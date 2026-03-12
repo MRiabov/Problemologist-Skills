@@ -77,7 +77,7 @@ Use only when the task explicitly allows direct execution side effects from the 
 - This skill defines the authored-script contract, not a preferred shell tactic.
 - Prompts should not hardcode `python -c`-style workflows here.
 - Validation should operate on the real `script.py` artifact rather than alternate reconstructed geometry.
-- For engineer or benchmark self-checks, prefer the runtime helper tools that operate on `script.py` (`validate(...)`, `validate_and_price(...)`, `preview_design(...)`, `simulate(...)`, `submit_for_review(...)`) instead of raw shell import probes such as `python -c "from script import result ..."`.
+- For engineer or benchmark self-checks, prefer dedicated runtime helper tools that operate on `script.py` when they are exposed. If they are not exposed in the current tool surface, use one short workspace-root `execute_command(...)` probe that imports `result` from `script.py` and calls `utils.submission.validate(...)` / `simulate(...)` instead of a fragile `python -c "from script import result ..."` one-liner.
 - `execute_command(...)` already runs from the seeded workspace root. Do not prepend `cd /workspace` or other host-specific workspace paths before those checks.
 
 ## Safety rules
@@ -93,3 +93,4 @@ Use only when the task explicitly allows direct execution side effects from the 
 9. Updating `todo.md` is not a reason to stop early. Finish the required assembly unless a concrete blocker forces a partial handoff or refusal.
 10. For simple freestanding/passive mechanical seeds, start with the fewest primitives and booleans that satisfy the planner handoff. Avoid decorative fillets, chamfers, and optional detailing unless functionally required.
 11. For simple passive seeds, the normal read set is the planner handoff plus `objectives.yaml`. Do not treat general CAD skills or large helper references as mandatory pre-reads before the first draft.
+12. If the task or seeded `todo.md` explicitly requires validation or simulation before handoff, a syntax-only `py_compile` check is not enough. Keep `script.py` import-safe, then run one real probe against `result` and fix any runtime failure before stopping.
