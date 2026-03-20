@@ -1,11 +1,12 @@
 ---
 name: electronics-engineering
-description: Electromechanical planning and runtime guidance for the current Problemologist electronics stack. Use when a plan or implementation includes an `electronics` section, powered motors, wire routing, circuit validation, or electronics review.
+description: Electromechanical planning and runtime guidance for the current Problemologist electronics stack. Use only when a plan or implementation explicitly includes an `electronics` section, benchmark `electronics_requirements`, circuit validation, or electronics review.
 ---
 
 # Electronics Engineering Skill
 
 Use this skill for current repo behavior, not legacy prompt lore.
+It is for electromechanical reasoning and handoff alignment, not for importing runtime internals into authored `script.py`.
 
 ## Load The Right Reference
 
@@ -25,11 +26,11 @@ Use this skill for current repo behavior, not legacy prompt lore.
    A valid netlist is not enough if the routed wire path collides with geometry or tears under motion.
 4. Use current schemas and helpers, not stale placeholder APIs.
 5. Backward compatibility still exists:
-   if there is no `electronics` section, legacy episodes may still behave as implicitly powered. Do not invent electronics unless the task requires it.
+   if there is no `electronics` section and no explicit circuit-validation task, do not load this skill just because the design has motors or wires. Do not invent electronics unless the task requires it.
 
 ## Practical Workflow
 
-1. Read the `electronics` section or planner intent.
+1. Read the `electronics` section or explicit circuit-validation intent.
 2. Load the current API reference.
 3. Define components and wires with explicit terminals.
 4. Run circuit validation and power-budget checks.
@@ -39,3 +40,4 @@ Use this skill for current repo behavior, not legacy prompt lore.
 
 - For authored CAD scripts, continue to use the canonical `utils.*` import surface unless the task is specifically editing repo internals.
 - For repo/runtime work, the current implementation surface is centered on `worker_heavy/utils/electronics.py`, `shared/circuit_builder.py`, `shared/pyspice_utils.py`, `shared/wire_utils.py`, and `shared/models/schemas.py`.
+- Do not treat those runtime/internal helper modules as part of the authored submission-script import contract. `script.py` should stay on the canonical `utils.submission` / `utils.metadata` surface and use direct build123d geometry for any physical implementation details.
