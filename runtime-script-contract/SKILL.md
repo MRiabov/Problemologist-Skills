@@ -43,6 +43,26 @@ The runtime accepts either of these patterns:
 
 `build()` is optional compatibility, not the preferred contract.
 
+## Evaluation Playbook
+
+Use this sequence for engineer-coder evals:
+
+1. Read the seeded handoff files first: `plan.md`, `todo.md`, `assembly_definition.yaml`, and `benchmark_definition.yaml`.
+2. Read `skills/build123d_cad_drafting_skill/SKILL.md` before the first geometry draft.
+3. Only read `skills/electronics-engineering/SKILL.md` if the approved handoff explicitly contains an `electronics` section or the benchmark declares `electronics_requirements`. Motors alone do not imply an electronics task, and mechanical wire-routing placeholders do not qualify.
+4. Keep the first `script.py` draft compact and complete for the handoff. Prefer a direct `result = ...` binding and avoid extra helper files.
+5. Run one cheap syntax check first, then one real probe against the authored `script.py`:
+   - `py_compile` or equivalent
+   - `from script import result`
+   - `from utils.submission import validate, simulate`
+   - `validate(result)`
+   - `simulate(result)` if validation passes
+6. If validation fails, fix the geometry or placement in `script.py`, not the execution contract.
+7. If the same issue persists after one targeted fix, record the blocker in `journal.md` and stop diagnostics instead of widening into repo spelunking.
+8. For engineer-owned scripts, do not copy benchmark-only `fixed=True` examples into the implementation unless the current task explicitly says you are authoring benchmark fixtures.
+9. If the workspace includes a reviewer-approved seed artifact for the same mechanism family, mirror its placement pattern and datums before inventing a new layout. Adapt imports and metadata to the current runtime contract, but keep the proven geometry conventions. For the sideways-transfer family, ensure the roller bed and goal tray do not overlap in X; if the tray width is 150 mm, a center near `x=505` mm is safer than the approximate seed center `x=485` mm.
+10. If the task includes explicit electronics requirements, keep the electrical design in the approved handoff artifacts and direct geometry implementation. Do not import `utils.electronics`, `shared.*`, or `worker_heavy.*` from `script.py`; those are runtime internals, not the authored submission-script API.
+
 ## Placement contract
 
 Place top-level authored parts with `Location(...)` through one of these patterns:
@@ -50,6 +70,13 @@ Place top-level authored parts with `Location(...)` through one of these pattern
 - `part.move(Location(...))`
 - `part.moved(Location(...))`
 - `part.location = Location(...)`
+
+For parts that must sit on a datum surface or on top of another part, make the vertical alignment explicit:
+
+- Prefer `align=(Align.CENTER, Align.CENTER, Align.MIN)` for box-like solids that rest on a floor or base plate.
+- Then place the part with the bottom face at the intended datum using `Location((x, y, z))`.
+- Do not rely on the default `Box(...)` alignment if the part must avoid interpenetrating a support part.
+- If `validate(result)` reports a geometric intersection, inspect the Z datum alignment between the base plate and every child part before redesigning the mechanism.
 
 Do not rely on `part.position = (...)` as the runtime placement contract for authored assemblies.
 
