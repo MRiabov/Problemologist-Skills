@@ -33,6 +33,7 @@ For ordinary mechanical engineer scripts, keep imports minimal:
 - Keep the primary geometry and assembly definition in `script.py`; do not split core authored state into scratch verifier files.
 - For planner/coder handoffs, `script.py` should implement the full required assembly for that turn, not just an initial subset of parts.
 - For routine passive/freestanding mechanical handoffs, draft `script.py` from the planner files first; do not pause to reread general CAD references unless you hit a concrete modeling blocker.
+- In benchmark and engineer assemblies, every top-level child label must be unique and must not be `environment` or start with `zone_`. Those names are reserved for the scene root and simulator-generated objective bodies, and duplicate labels collide with MJCF mesh/body names.
 
 ## Final assembly exposure
 

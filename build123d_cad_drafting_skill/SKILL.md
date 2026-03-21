@@ -13,6 +13,7 @@ description: Expert CAD modeling using build123d. Includes builder modes, semant
 2. **Semantic Selectors**: Avoid indices. Use `faces()`, `edges()`, `vertices()` with `sort_by(Axis.Z)` or `last()`/`first()`.
 3. **MJCF Compliance**: Ensure parts are non-intersecting if they belong to different simulation links.
 4. **Assembly Labels**: Use `.label = "stator"` and `.label = "rotor"` for automatic motor/joint injection in MJCF.
+5. **Label Namespace Hygiene**: Top-level authored labels must be unique and must not be `environment` or start with `zone_`. The simulator reserves those names for the scene root and generated objective bodies, and duplicate labels collide with MJCF mesh/body names.
 
 ## Placement And Rotation Contract
 
