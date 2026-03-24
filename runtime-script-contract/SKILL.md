@@ -48,20 +48,20 @@ The runtime accepts either of these patterns:
 
 Use this sequence for engineer-coder evals:
 
-1. Read the seeded handoff files first: `plan.md`, `todo.md`, `assembly_definition.yaml`, and `benchmark_definition.yaml`.
-2. Read `skills/build123d_cad_drafting_skill/SKILL.md` before the first geometry draft.
-3. Only read `skills/electronics-engineering/SKILL.md` if the approved handoff explicitly contains an `electronics` section or the benchmark declares `electronics_requirements`. Motors alone do not imply an electronics task, and mechanical wire-routing placeholders do not qualify.
-4. Keep the first `script.py` draft compact and complete for the handoff. Prefer a direct `result = ...` binding and avoid extra helper files.
-5. Run one cheap syntax check first, then one real probe against the authored `script.py`:
-   - `py_compile` or equivalent
-   - `from script import result`
-   - `from utils.submission import validate, simulate`
-   - `validate(result)`
-   - `simulate(result)` if validation passes
-6. If validation fails, fix the geometry or placement in `script.py`, not the execution contract.
-7. If the same issue persists after one targeted fix, record the blocker in `journal.md` and stop diagnostics instead of widening into repo spelunking.
-8. For engineer-owned scripts, do not copy benchmark-only `fixed=True` examples into the implementation unless the current task explicitly says you are authoring benchmark fixtures.
-9. If the workspace includes a reviewer-approved seed artifact for the same mechanism family, mirror its placement pattern and datums before inventing a new layout. Adapt imports and metadata to the current runtime contract, but keep the proven geometry conventions. For the sideways-transfer family, ensure the roller bed and goal tray do not overlap in X; if the tray width is 150 mm, a center near `x=505` mm is safer than the approximate seed center `x=485` mm.
+01. Read the seeded handoff files first: `plan.md`, `todo.md`, `assembly_definition.yaml`, and `benchmark_definition.yaml`.
+02. Read `skills/build123d_cad_drafting_skill/SKILL.md` before the first geometry draft.
+03. Only read `skills/electronics-engineering/SKILL.md` if the approved handoff explicitly contains an `electronics` section or the benchmark declares `electronics_requirements`. Motors alone do not imply an electronics task, and mechanical wire-routing placeholders do not qualify.
+04. Keep the first `script.py` draft compact and complete for the handoff. Prefer a direct `result = ...` binding and avoid extra helper files.
+05. Run one cheap syntax check first, then one real probe against the authored `script.py`:
+    - `py_compile` or equivalent
+    - `from script import result`
+    - `from utils.submission import validate, simulate`
+    - `validate(result)`
+    - `simulate(result)` if validation passes
+06. If validation fails, fix the geometry or placement in `script.py`, not the execution contract.
+07. If the same issue persists after one targeted fix, record the blocker in `journal.md` and stop diagnostics instead of widening into repo spelunking.
+08. For engineer-owned scripts, do not copy benchmark-only `fixed=True` examples into the implementation unless the current task explicitly says you are authoring benchmark fixtures.
+09. If the workspace includes a reviewer-approved seed artifact for the same mechanism family, mirror its placement pattern and datums before inventing a new layout. Adapt imports and metadata to the current runtime contract, but keep the proven geometry conventions. For the sideways-transfer family, ensure the roller bed and goal tray do not overlap in X; if the tray width is 150 mm, a center near `x=505` mm is safer than the approximate seed center `x=485` mm.
 10. If the task includes explicit electronics requirements, keep the electrical design in the approved handoff artifacts and direct geometry implementation. Do not import `utils.electronics`, `shared.*`, or `worker_heavy.*` from `script.py`; those are runtime internals, not the authored submission-script API.
 
 ## Placement contract
@@ -110,15 +110,15 @@ Use only when the task explicitly allows direct execution side effects from the 
 
 ## Safety rules
 
-1. Do not use `if __name__ == "__main__":` in authored scripts.
-2. Use workspace-relative paths such as `script.py`, `todo.md`, and `renders/preview.png`.
-3. Do not add a leading slash to workspace artifacts. Use `script.py`, `journal.md`, `todo.md`, `renders/...`, and `simulation_result.json`, not `/script.py`, `/journal.md`, `/todo.md`, `/renders/...`, or `/simulation_result.json`.
-4. Keep long operational guidance in skills like this one rather than copying it into planner/coder prompts.
-5. Keep authored scripts terse. Avoid long module docstrings, banner comment blocks, and other decorative prose in files that will be emitted through `write_file(...)`.
-6. If a tool call would require a very large or quote-heavy `content` string, simplify the script content first so the `write_file(...)` arguments remain valid JSON.
-7. If `write_file("script.py", ...)` is rejected for invalid JSON arguments, do not retry the same large payload. Write a compact import-safe stub first, then expand the file with smaller `edit_file(...)` replacements.
-8. Do not import visualization-only helpers such as `ocp_vscode`, and do not call `show(...)` from authored workspace scripts.
-9. Updating `todo.md` is not a reason to stop early. Finish the required assembly unless a concrete blocker forces a partial handoff or refusal.
+01. Do not use `if __name__ == "__main__":` in authored scripts.
+02. Use workspace-relative paths such as `script.py`, `todo.md`, and `renders/preview.png`.
+03. Do not add a leading slash to workspace artifacts. Use `script.py`, `journal.md`, `todo.md`, `renders/...`, and `simulation_result.json`, not `/script.py`, `/journal.md`, `/todo.md`, `/renders/...`, or `/simulation_result.json`.
+04. Keep long operational guidance in skills like this one rather than copying it into planner/coder prompts.
+05. Keep authored scripts terse. Avoid long module docstrings, banner comment blocks, and other decorative prose in files that will be emitted through `write_file(...)`.
+06. If a tool call would require a very large or quote-heavy `content` string, simplify the script content first so the `write_file(...)` arguments remain valid JSON.
+07. If `write_file("script.py", ...)` is rejected for invalid JSON arguments, do not retry the same large payload. Write a compact import-safe stub first, then expand the file with smaller `edit_file(...)` replacements.
+08. Do not import visualization-only helpers such as `ocp_vscode`, and do not call `show(...)` from authored workspace scripts.
+09. Updating `todo.md` is not a reason to stop early. Finish the required assembly unless a concrete blocker forces a partial handoff or refusal.
 10. For simple freestanding/passive mechanical seeds, start with the fewest primitives and booleans that satisfy the planner handoff. Avoid decorative fillets, chamfers, and optional detailing unless functionally required.
 11. For simple passive seeds, the normal read set is the planner handoff plus `objectives.yaml`. Do not treat general CAD skills or large helper references as mandatory pre-reads before the first draft.
 12. If the task or seeded `todo.md` explicitly requires validation or simulation before handoff, a syntax-only `py_compile` check is not enough. Keep `script.py` import-safe, then run one real probe against `result` and fix any runtime failure before stopping.

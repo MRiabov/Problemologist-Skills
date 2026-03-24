@@ -13,9 +13,9 @@ from pydantic import ValidationError
 
 # Add project root to path to import shared models
 sys.path.append(str(Path(__file__).parents[3]))
+from shared.cots.runtime import get_catalog_item_with_metadata
 from shared.enums import ManufacturingMethod
 from shared.models.schemas import AssemblyDefinition
-from shared.cots.runtime import get_catalog_item_with_metadata
 from worker_heavy.utils.dfm import (
     calculate_declared_assembly_cost,
     load_planner_manufacturing_config,
@@ -89,9 +89,10 @@ def main():
             part["manufacturer"] = manufacturer
 
             unit_cost = float(catalog_item.unit_cost)
-            if part.get("unit_cost_usd") is not None and abs(
-                float(part["unit_cost_usd"]) - unit_cost
-            ) > 1e-6:
+            if (
+                part.get("unit_cost_usd") is not None
+                and abs(float(part["unit_cost_usd"]) - unit_cost) > 1e-6
+            ):
                 print(
                     f"Error: cots_parts entry '{part_id}' unit_cost_usd must match catalog unit cost {unit_cost}."
                 )
@@ -99,9 +100,10 @@ def main():
             part["unit_cost_usd"] = round(unit_cost, 6)
 
             weight_g = float(catalog_item.weight_g)
-            if part.get("weight_g") is not None and abs(
-                float(part["weight_g"]) - weight_g
-            ) > 1e-6:
+            if (
+                part.get("weight_g") is not None
+                and abs(float(part["weight_g"]) - weight_g) > 1e-6
+            ):
                 print(
                     f"Error: cots_parts entry '{part_id}' weight_g must match catalog weight {weight_g}."
                 )

@@ -26,7 +26,9 @@
 ## Common Patterns
 
 ### Ribbing for Stiffness
+
 Add internal ribs to increase the Moment of Inertia ($I$) without significantly increasing volume/cost.
+
 ```python
 # Expert Pattern: Adding internal ribs to a shell
 rib_base = part.faces().filter_by(Axis.Z).last()
@@ -36,7 +38,9 @@ part = part + ribs
 ```
 
 ### Fillets to Reduce Stress Concentration
+
 Sharp internal corners act as "stress risers." Always add fillets to internal edges that experience high load.
+
 ```python
 # Expert Pattern: Stress reduction fillet
 high_stress_edges = part.edges().filter_by(Axis.Z).internal()

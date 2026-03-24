@@ -1,7 +1,7 @@
-import PySpice.Unit as u
 from build123d import *
+
+from shared.models.schemas import ComponentConfig, ElectronicsSection, PowerSupplyConfig
 from shared.wire_utils import route_wire
-from shared.models.schemas import ElectronicsSection, PowerSupplyConfig, ComponentConfig
 
 # 1. Define Electronics Section
 electronics = ElectronicsSection(
