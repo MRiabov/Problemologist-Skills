@@ -79,8 +79,9 @@ def main():
                 sys.exit(1)
 
             catalog_item, catalog_metadata = lookup
+            catalog_details = catalog_item.metadata or {}
 
-            manufacturer = catalog_item.metadata.get("manufacturer", "unknown")
+            manufacturer = catalog_details.get("manufacturer", "unknown")
             if part.get("manufacturer") not in (None, "", manufacturer):
                 print(
                     f"Error: cots_parts entry '{part_id}' manufacturer must match catalog manufacturer '{manufacturer}'."
