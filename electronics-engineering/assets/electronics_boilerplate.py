@@ -1,4 +1,4 @@
-from build123d import *
+from build123d import *  # noqa: F403
 
 from shared.models.schemas import ComponentConfig, ElectronicsSection, PowerSupplyConfig
 from shared.wire_utils import route_wire
