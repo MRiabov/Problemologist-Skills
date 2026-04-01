@@ -86,15 +86,15 @@ Do not invent fallback behavior to bridge contradictions. If the handoff is inco
 
 ## Design Rules
 
-1. Prefer passive solutions first.
-2. Add motion only when the task truly needs it.
-3. Every non-static DOF must map to a real mechanism, not a convenience.
-4. Keep the motion contract explicit if the design uses motors, sliders, latches, or other actuated elements.
-5. Keep benchmark-owned fixtures read-only and never reassign their ownership or pricing.
-6. Keep top-level authored labels unique and avoid reserved names such as `environment` and `zone_...`.
-7. Place parts with `Location(...)` or equivalent explicit placement.
-8. Keep COTS components intact when provenance or exact part identity matters.
-9. Keep electronics separate from mechanical guessing; only load electronics logic when the handoff explicitly demands it.
+01. Prefer passive solutions first.
+02. Add motion only when the task truly needs it.
+03. Every non-static DOF must map to a real mechanism, not a convenience.
+04. Keep the motion contract explicit if the design uses motors, sliders, latches, or other actuated elements.
+05. Keep benchmark-owned fixtures read-only and never reassign their ownership or pricing.
+06. Keep top-level authored labels unique and avoid reserved names such as `environment` and `zone_...`.
+07. Place parts with `Location(...)` or equivalent explicit placement.
+08. Keep COTS components intact when provenance or exact part identity matters.
+09. Keep electronics separate from mechanical guessing; only load electronics logic when the handoff explicitly demands it.
 10. Treat cost, weight, and manufacturability as design constraints, not afterthoughts.
 
 ## Retry Discipline
