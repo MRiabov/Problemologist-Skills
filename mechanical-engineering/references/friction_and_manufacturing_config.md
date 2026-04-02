@@ -30,7 +30,7 @@ Equality is not enough. Use a safety margin above the threshold if the design mu
 From the seeded `manufacturing_config.yaml`:
 
 | Material | friction_coef |
-| -- | --: |
+| -- | -: |
 | `aluminum_6061` | `0.61` |
 | `steel_carbon` | `0.60` |
 | `steel_structural` | `0.62` |
@@ -43,7 +43,7 @@ From the seeded `manufacturing_config.yaml`:
 Process-specific material blocks in the same file:
 
 | Block | Material | friction_coef |
-| -- | -- | --: |
+| -- | -- | -: |
 | `cnc` | `aluminum_6061` | `0.60` |
 | `injection_molding` | `abs` | `0.50` |
 | `three_dp` | `abs` | `0.40` |
