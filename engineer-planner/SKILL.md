@@ -64,15 +64,15 @@ Do not invent fallback behavior to bridge contradictions. If the handoff is inco
 
 ## Operating Loop
 
-1. Read the handoff quickly and extract the hard constraints: goal zone, forbid zones, build zone, simulation bounds, runtime jitter, and cost/weight caps.
-2. Identify the smallest plausible mechanism family before drafting geometry.
-3. Keep the motion contract explicit if the solution needs moving parts, and minimize DOFs, actuators, and unique parts.
-4. Draft `plan.md`, `todo.md`, `benchmark_definition.yaml`, and `assembly_definition.yaml` so they agree on labels, coordinates, limits, and ownership.
-5. When drafting mode is enabled, keep `plan.md` narrative-first and write the machine-readable drafting contract in `assembly_definition.yaml.drafting`.
-6. Bind views, datums, dimensions, callouts, and notes to the reviewed mechanism only; do not invent new parts, joints, motions, or geometry beyond the existing handoff.
-7. Keep planner drafting scripts aligned with the same preserved geometry when drafting mode is enabled.
-8. Use `validate_costing_and_price()` before submission and fix the source of any pricing or weight mismatch.
-9. Inspect relevant renders or draft drawings with `preview_drawing()` and media inspection when visual evidence exists.
+01. Read the handoff quickly and extract the hard constraints: goal zone, forbid zones, build zone, simulation bounds, runtime jitter, and cost/weight caps.
+02. Identify the smallest plausible mechanism family before drafting geometry.
+03. Keep the motion contract explicit if the solution needs moving parts, and minimize DOFs, actuators, and unique parts.
+04. Draft `plan.md`, `todo.md`, `benchmark_definition.yaml`, and `assembly_definition.yaml` so they agree on labels, coordinates, limits, and ownership.
+05. When drafting mode is enabled, keep `plan.md` narrative-first and write the machine-readable drafting contract in `assembly_definition.yaml.drafting`.
+06. Bind views, datums, dimensions, callouts, and notes to the reviewed mechanism only; do not invent new parts, joints, motions, or geometry beyond the existing handoff.
+07. Keep planner drafting scripts aligned with the same preserved geometry when drafting mode is enabled.
+08. Use `validate_costing_and_price()` before submission and fix the source of any pricing or weight mismatch.
+09. Inspect relevant renders or draft drawings with `preview_drawing()` and media inspection when visual evidence exists.
 10. Call `submit_plan()` only when the handoff is coherent, physically plausible, and ready for implementation.
 
 ## Plan Rules

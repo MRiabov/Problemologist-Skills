@@ -69,4 +69,3 @@ Before submission, verify all of the following:
 ## Submission Gate
 
 Call `submit_plan()` only after the handoff is internally consistent, placeholder-free, and ready for downstream benchmark coding.
-

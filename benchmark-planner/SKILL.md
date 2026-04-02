@@ -33,15 +33,15 @@ Read these before drafting or revising the handoff:
 
 ## Working Rules
 
-1. Design the benchmark for the engineer, not the solution.
-2. Keep the challenge singular: one objective, one failure mode, one obvious path to success.
-3. Keep `benchmark_definition.yaml` as the source of truth for objective geometry, randomization, and benchmark estimates.
-4. Keep `benchmark_assembly_definition.yaml` as benchmark-owned fixture structure and motion contract.
-5. Keep `plan.md`, `todo.md`, the YAML files, and both benchmark planning scripts mutually consistent.
-6. Do not expect `benchmark_script.py` in the planner workspace before plan approval.
-7. Treat benchmark-owned fixtures as downstream read-only context. Do not drift into engineer solution design.
-8. Preserve exact part identity when a benchmark fixture is catalog-backed. Do not replace it with anonymous solids.
-9. Use reserved names carefully: top-level authored labels must be unique and must not be `environment` or start with `zone_`.
+01. Design the benchmark for the engineer, not the solution.
+02. Keep the challenge singular: one objective, one failure mode, one obvious path to success.
+03. Keep `benchmark_definition.yaml` as the source of truth for objective geometry, randomization, and benchmark estimates.
+04. Keep `benchmark_assembly_definition.yaml` as benchmark-owned fixture structure and motion contract.
+05. Keep `plan.md`, `todo.md`, the YAML files, and both benchmark planning scripts mutually consistent.
+06. Do not expect `benchmark_script.py` in the planner workspace before plan approval.
+07. Treat benchmark-owned fixtures as downstream read-only context. Do not drift into engineer solution design.
+08. Preserve exact part identity when a benchmark fixture is catalog-backed. Do not replace it with anonymous solids.
+09. Use reserved names carefully: top-level authored labels must be unique and must not be `environment` or start with `zone_`.
 10. Do not invent fallback labels, placeholder fields, or silent defaults to make a draft pass.
 
 ## Planner Loop
