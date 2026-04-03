@@ -77,10 +77,10 @@ When the benchmark planner uses its structured template, read `plan.md` as a sec
 
 Load sibling skill guidance only when it changes the implementation outcome:
 
-- [engineer_coder](../engineer_coder/SKILL.md) for shared implementation discipline such as import safety, validation strategy, and evidence handling.
+- [engineer-coder](../engineer-coder/SKILL.md) for shared implementation discipline such as import safety, validation strategy, and evidence handling.
 - [render-evidence](../render-evidence/SKILL.md) when media inspection or preview bundle handling is needed.
 - [runtime-script-contract](../runtime-script-contract/SKILL.md)
-- [build123d_cad_drafting_skill](../build123d_cad_drafting_skill/SKILL.md)
+- [build123d-cad-drafting-skill](../build123d-cad-drafting-skill/SKILL.md)
 - [mechanical-engineering](../mechanical-engineering/SKILL.md)
 - [cots-parts](../cots-parts/SKILL.md) when exact catalog identity matters.
 - [manufacturing-knowledge](../manufacturing-knowledge/SKILL.md) when cost or weight constraints drive the design.
@@ -150,4 +150,4 @@ Do not invent fallback behavior to paper over contradictions. If the approved pl
 
 - Add recurring benchmark geometry families and implementation heuristics to `references/benchmark_patterns.md`.
 - Add recurring blockers, diagnostics, and repair patterns to `references/failure_modes.md`.
-- Mirror shared patterns from `engineer_coder` only when the benchmark semantics are actually the same.
+- Mirror shared patterns from `engineer-coder` only when the benchmark semantics are actually the same.

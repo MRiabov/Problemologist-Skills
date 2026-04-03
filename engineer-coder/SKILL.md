@@ -1,5 +1,5 @@
 ---
-name: engineer_coder
+name: engineer-coder
 description: Problemologist engineering implementation role. Use when turning approved engineering handoffs into solution_script.py, solving engineering evals with bounded retries, selecting mechanism patterns, validating and simulating revisions, inspecting render evidence, preserving planner inventory exactness, grounding work in proof-backed plan.md contracts, or refusing an infeasible plan with plan_refusal.md.
 ---
 
@@ -81,7 +81,7 @@ Then load specialist knowledge only as needed:
 
 - [render-evidence](../render-evidence/SKILL.md) when the task needs preview generation, media inspection, bundle selection, or point-pick queries
 - [runtime-script-contract](../runtime-script-contract/SKILL.md)
-- [build123d_cad_drafting_skill](../build123d_cad_drafting_skill/SKILL.md)
+- [build123d-cad-drafting-skill](../build123d-cad-drafting-skill/SKILL.md)
 - [mechanical-engineering](../mechanical-engineering/SKILL.md)
 - [cots-parts](../cots-parts/SKILL.md)
 - [manufacturing-knowledge](../manufacturing-knowledge/SKILL.md)

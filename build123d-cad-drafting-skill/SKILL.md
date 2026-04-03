@@ -1,5 +1,5 @@
 ---
-name: build123d_cad_drafting_skill
+name: build123d-cad-drafting-skill
 description: Use this skill when you need do CAD modeling using build123d. Includes builder modes, semantic selectors, and MJCF-compatible boolean strategies, and everything you need to know about build123d syntax.
 ---
 
