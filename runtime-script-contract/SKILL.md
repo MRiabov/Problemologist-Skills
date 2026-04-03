@@ -23,9 +23,12 @@ Use top-level `utils` imports in authored scripts:
 ```python
 from utils.submission import validate, simulate, submit_for_review
 from utils.metadata import PartMetadata, CompoundMetadata
+from utils.preview import preview, preview_drawing, objectives_geometry
 ```
 
 `shared.*` paths are implementation internals. Do not use them in authored agent scripts.
+
+For render evidence and point-pick workflows, prefer the namespaced helpers in `utils.preview`; use `utils.visualize` only as a compatibility alias when older code already references it.
 
 For ordinary mechanical engineer scripts, keep imports minimal:
 

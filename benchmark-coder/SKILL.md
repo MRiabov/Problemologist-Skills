@@ -15,6 +15,20 @@ This skill operationalizes the `benchmark_coder` prompt in `config/prompts.yaml`
 4. Validate and simulate the latest revision before handoff.
 5. Refuse cleanly when the approved plan is genuinely infeasible.
 
+## Canonical Helpers
+
+Use the runtime helpers explicitly in authored benchmark scripts:
+
+```python
+from utils.submission import validate, simulate, submit_for_review
+from utils.preview import preview, preview_drawing, objectives_geometry
+```
+
+- `validate(result)` and `simulate(result)` are the required pre-handoff checks.
+- `submit_for_review(result)` is the final benchmark review handoff helper.
+- `preview(...)` and `preview_drawing()` are the evidence-generation paths; `objectives_geometry()` reconstructs benchmark objective overlays when needed.
+- `from utils.visualize import ...` is a compatibility alias, but `utils.preview` is the preferred namespace for new code.
+
 ## Geometry Contract
 
 - Base every size, offset, and clearance on approved geometry, COTS dimensions, or explicit formulas.

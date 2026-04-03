@@ -41,6 +41,8 @@ Use this skill as a router. Keep the main prompt lean and load only the referenc
    If `tan(theta)` does not beat the relevant `friction_coef`, treat the mechanism as stalled until geometry or family changes.
 9. If the mechanism uses COTS components, keep the concrete part contract separate from the motion contract.
    Do not treat motors, fixtures, or other catalog-backed parts as generic geometry.
+10. Before tuning capture pockets or side rails, verify that the object actually reaches the support surface at the declared spawn height.
+    If the object never makes first contact, lower or reshape the first support surface before changing capture geometry.
 
 ## Passive-Transfer Debugging
 
@@ -48,6 +50,7 @@ Use this skill as a router. Keep the main prompt lean and load only the referenc
 - Separate validation from effectiveness. Passing geometry validation is necessary, but it is not evidence of a working mechanism. Stop treating validation success as progress once simulation is still failing.
 - Inspect the first simulation frames or video as soon as direction is uncertain.
 - When the motion is reversed, verify slope sign, handedness, and datum orientation before changing capture width or seam cleanup.
+- When the object never gets onto the intended path, check first contact height at the spawn point before tuning pocket geometry.
 - For friction-sensitive passive transfer, use the workspace manufacturing config rather than a guessed coefficient. If the object stalls, first check `tan(theta)` against `friction_coef`, then widen capture or change the mechanism family.
 - Treat seed hints for direction, x-position, and capture span as hard constraints.
 - Change one variable at a time; validation success is necessary, but it is not proof that the mechanism works.
