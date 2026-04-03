@@ -22,6 +22,37 @@ Read this skill and the relevant reference files below before planning any `buil
 
 For orthographic sheets, title blocks, and vector export, use the companion [build123d-technical-drawing](../build123d-technical-drawing/SKILL.md) skill and the technical-drawing reference below. Keep the 3D model authoritative; drawings are projections, not a second source of truth.
 
+## Positioning Hierarchy
+
+- If environment fixtures are available for attachment, prefer faces, edges, and other fixture features over raw coordinates.
+- Use constraint chains and derived formulas from source geometry or environment properties such as `Wire.length` before reaching for absolute world positions. Use calculator-backed or scripted derivations for computed values; derived formulas are better than hand math, and hardcoded values are the last resort.
+- Use `with Locations(...)` when you need a placement context for repeated instances. `Location(...)` is a pose object, not a context manager.
+- Treat absolute locations outside of COTS constants as a drafting smell. Keep them minimal, traceable, and only use them when no attachment or datum relationship is available.
+
+## Repo-Specific Contracts
+
+1. **Part Authoring Pattern**: Build solids inside `BuildPart`, then extract `builder.part`, transform it, and only then assign labels/metadata.
+2. **Constructor Guardrails**:
+   - `Box` dimensions in this runtime are positional: `Box(length, width, height)`.
+   - Do not use `Box(width=..., height=..., length=...)`.
+   - For bottom/top alignment, use `Align.MIN` / `Align.MAX`, not `Align.BOTTOM` / `Align.TOP`.
+   - Place top-level benchmark parts with `.move(Location(...))` or `.moved(Location(...))`, not `.translate(...)`. The simulation exporter recenters meshes and uses `child.location` for placement.
+   - Do not pass `label=` into `Box`, `Sphere`, `Cylinder`, `Compound`, or other build123d constructors.
+   - Assign `.label` after the part/compound already exists.
+3. **Metadata Is Mandatory**:
+   - Every part must have `PartMetadata(...)`.
+   - Every final assembly must have `CompoundMetadata(...)`.
+   - `CompoundMetadata(fixed=True)` on the parent assembly does not make child parts static. Mark each static benchmark fixture with `PartMetadata(..., fixed=True)` individually.
+   - The repo-specific metadata import path is fixed: `from shared.models.schemas import PartMetadata, CompoundMetadata`. Do not grep the codebase to rediscover it.
+4. **MJCF Compliance**:
+   - Ensure parts are non-intersecting when they belong to different simulation links.
+   - For direct pairwise checks, use `shape_a.intersect(shape_b)`. The returned shape has a `.volume` property; if that volume is greater than zero, the shapes intersect, and you can inspect or render the returned intersection shape for debugging.
+   - For grouped children, wrap the parts in `Compound(children=[...])` and call `do_children_intersect()` on the compound. In this runtime it returns `(intersects, (shape_a, shape_b), volume)`, so unpack it for logging. When no overlap exists, the tuple is `(False, (None, None), 0.0)`.
+5. **Assembly Labels**: Use `.label = "stator"` and `.label = "rotor"` for automatic motor/joint injection in MJCF when relevant.
+6. **Final Assembly Contract**: Return a `Compound(children=[...])` from `build()`, then assign `.label` and `.metadata` to that compound.
+   - Do not create an empty `Compound()` and then mutate `compound.children`; treat the children collection as construction-time input.
+   - Preview yaw is measured clockwise from front. If a rear camera angle makes the model look mirrored on X, confirm the camera direction and world-space placement before changing geometry; the image may only be a back-side view.
+
 ## Placement And Rotation Contract
 
 - Create top-level authored solids at the origin, then place them with `Location(...)`.
